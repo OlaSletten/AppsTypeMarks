@@ -45,3 +45,20 @@ Scan all `*.yml` files and check for:
 - **Add**: Create `{package_id}.yml` with type and directory paths
 - **Update**: Modify directories or add version entries
 - **Remove**: Delete the `.yml` file for a package
+
+## Google Cloud & Google Play
+
+MCP servers available for Google Cloud and Google Play integration:
+
+- **gcloud** (`@google-cloud/gcloud-mcp`) — Google Cloud CLI via natural language
+- **google-play** (`google-play-developer-mcp`) — Android Publisher API (app listings, releases, reviews, subscriptions)
+
+### Prerequisites
+
+- `gcloud` CLI installed and authenticated
+- Google Cloud project with Vertex AI API enabled
+- For Google Play: `GOOGLE_APPLICATION_CREDENTIALS` pointing to a service account JSON key
+
+### Setup
+
+Run `scripts/Setup-GCloud.ps1` to configure gcloud, enable APIs, and set up credentials.

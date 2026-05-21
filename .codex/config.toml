@@ -9,3 +9,16 @@ enabled = true
 command = "npx"
 args = ["-y", "@upstash/context7-mcp"]
 enabled = true
+
+[mcp_servers.gcloud]
+command = "npx"
+args = ["-y", "@google-cloud/gcloud-mcp"]
+enabled = true
+
+[mcp_servers.google-play]
+command = "npx"
+args = ["-y", "google-play-developer-mcp"]
+enabled = true
+
+[mcp_servers.google-play.env]
+GOOGLE_APPLICATION_CREDENTIALS = "$GOOGLE_APPLICATION_CREDENTIALS"
