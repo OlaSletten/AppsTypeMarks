@@ -1,0 +1,29 @@
+{
+  "context": {
+    "fileName": ["GEMINI.md", "AGENTS.md"]
+  },
+  "mcpServers": {
+    "filesystem": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "."],
+      "env": {}
+    },
+    "context7": {
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp"],
+      "env": {}
+    },
+    "gcloud": {
+      "command": "npx",
+      "args": ["-y", "@google-cloud/gcloud-mcp"],
+      "env": {}
+    },
+    "google-play": {
+      "command": "npx",
+      "args": ["-y", "google-play-developer-mcp"],
+      "env": {
+        "GOOGLE_APPLICATION_CREDENTIALS": "$GOOGLE_APPLICATION_CREDENTIALS"
+      }
+    }
+  }
+}
