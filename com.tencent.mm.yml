@@ -6,3 +6,9 @@ marks:
   - versionCode: 2306
     directories:
       - /data/user/0/com.tencent.mm/MicroMsg
+windows:
+  - directories:
+      - '%USERPROFILE%\Documents\WeChat Files'
+      - '%USERPROFILE%\Documents\WeChat Files\{userid}\FileStorage\File'
+      - '%USERPROFILE%\Documents\WeChat Files\{userid}\FileStorage\Video'
+      - '%USERPROFILE%\Documents\WeChat Files\{userid}\FileStorage\Image'

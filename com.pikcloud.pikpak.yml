@@ -3,3 +3,7 @@ marks:
   - versionCode: 1
     directories:
       - /storage/emulated/0/Download/PikPak
+windows:
+  - directories:
+      - '%USERPROFILE%\Downloads\PikPak'
+      - '%LOCALAPPDATA%\PikPak'
