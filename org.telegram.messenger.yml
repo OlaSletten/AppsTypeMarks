@@ -3,3 +3,7 @@ marks:
   - versionCode: 1
     directories:
       - /storage/emulated/0/Android/data/org.telegram.messenger/files/Telegram/Telegram Files
+windows:
+  - directories:
+      - '%USERPROFILE%\Downloads\Telegram Desktop'
+      - '%APPDATA%\Telegram Desktop'

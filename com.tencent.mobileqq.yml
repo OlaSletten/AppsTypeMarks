@@ -6,3 +6,7 @@ marks:
   - versionCode: 1145
     directories:
       - /storage/emulated/0/Android/data/com.tencent.mobileqq/Tencent/QQfile_recv
+windows:
+  - directories:
+      - '%USERPROFILE%\Documents\Tencent Files\{qqnumber}\FileRecv'
+      - '%USERPROFILE%\Documents\Tencent Files\{qqnumber}\Image'
