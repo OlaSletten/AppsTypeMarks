@@ -76,6 +76,10 @@ function Send-CDP {
 }
 
 # ─── Main logic ───
+function ConvertTo-JsString([string]$Value) {
+    return ($Value | ConvertTo-Json -Compress)
+}
+
 function Invoke-BrowserAction {
     switch ($Action) {
         "tabs" {
@@ -122,7 +126,8 @@ function Invoke-BrowserAction {
         "click" {
             $selector = $Args_.selector
             if (-not $selector) { throw "Required: --selector" }
-            $js = "document.querySelector('$selector')?.click(); document.querySelector('$selector') ? 'clicked' : 'not_found'"
+            $sel = ConvertTo-JsString $selector
+            $js = "var el = document.querySelector($sel); if(el){el.click();'clicked'}else{'not_found'}"
             $result = Send-CDP -Method "Runtime.evaluate" -Params @{ expression = $js; returnByValue = $true }
             return @{ result = $result.result.value }
         }
@@ -130,8 +135,9 @@ function Invoke-BrowserAction {
             $selector = $Args_.selector
             $text = $Args_.text
             if (-not $selector -or -not $text) { throw "Required: --selector, --text" }
-            $escaped = $text -replace "'","\\'"
-            $js = "var el = document.querySelector('$selector'); if(el){el.focus();el.value='$escaped';el.dispatchEvent(new Event('input',{bubbles:true}));'typed'}else{'not_found'}"
+            $sel = ConvertTo-JsString $selector
+            $val = ConvertTo-JsString $text
+            $js = "var el = document.querySelector($sel); if(el){el.focus();el.value=$val;el.dispatchEvent(new Event('input',{bubbles:true}));'typed'}else{'not_found'}"
             $result = Send-CDP -Method "Runtime.evaluate" -Params @{ expression = $js; returnByValue = $true }
             return @{ result = $result.result.value }
         }
@@ -153,7 +159,7 @@ function Invoke-BrowserAction {
             $js = switch ($target) {
                 "top"    { "window.scrollTo(0,0);'scrolled_top'" }
                 "bottom" { "window.scrollTo(0,document.body.scrollHeight);'scrolled_bottom'" }
-                default  { "var el=document.querySelector('$target');if(el){el.scrollIntoView();'scrolled'}else{'not_found'}" }
+                default  { "var el=document.querySelector($(ConvertTo-JsString $target));if(el){el.scrollIntoView();'scrolled'}else{'not_found'}" }
             }
             $result = Send-CDP -Method "Runtime.evaluate" -Params @{ expression = $js; returnByValue = $true }
             return @{ result = $result.result.value }
@@ -165,12 +171,13 @@ function Invoke-BrowserAction {
             $results = @()
             foreach ($field in $fields) {
                 $sel = $field.selector
-                $val = $field.value -replace "'","\\'"
-                $js = "var el=document.querySelector('$sel');if(el){el.focus();el.value='$val';el.dispatchEvent(new Event('input',{bubbles:true}));'ok'}else{'not_found'}"
+                $jsSel = ConvertTo-JsString $sel
+                $val = ConvertTo-JsString $field.value
+                $js = "var el=document.querySelector($jsSel);if(el){el.focus();el.value=$val;el.dispatchEvent(new Event('input',{bubbles:true}));'ok'}else{'not_found'}"
                 $r = Send-CDP -Method "Runtime.evaluate" -Params @{ expression = $js; returnByValue = $true }
                 $results += @{ selector = $sel; result = $r.result.value }
                 if ($field.submit) {
-                    $submitJs = "document.querySelector('$($field.submit)')?.click();'submitted'"
+                    $submitJs = "document.querySelector($(ConvertTo-JsString $field.submit))?.click();'submitted'"
                     $null = Send-CDP -Method "Runtime.evaluate" -Params @{ expression = $submitJs; returnByValue = $true }
                     $results[-1].submitted = $true
                 }
